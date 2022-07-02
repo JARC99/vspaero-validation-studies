@@ -1,0 +1,41 @@
+void main() {
+
+    // Set file name
+    string fname = "validation_2.vsp3";
+
+    // Wing parameters
+	double span = 10.0;
+	double chord = 1.0;
+	double sweep = 0.0;
+
+    // Mesh parameters
+    double lecluster = 0.25;
+    double tecluster = 0.25;
+    double rootcluster = 1.0;
+    double tipcluster = 0.5;
+
+    double chordtess = 50;
+    double spantess = 25;
+
+
+    // Add wing
+    string wing_id = AddGeom( "WING");
+
+    // Modify wing
+    SetParmVal(wing_id, "TotalSpan", "WingGeom", span);
+    SetParmVal(wing_id, "Root_Chord", "XSec_1", chord);
+    SetParmVal(wing_id, "Tip_Chord", "XSec_1", chord);
+    SetParmVal(wing_id, "Sweep", "XSec_1", sweep);
+    Update();
+
+    // Modify mesh
+    SetParmVal(wing_id, "LECluster", "WingGeom", lecluster);
+    SetParmVal(wing_id, "TECluster", "WingGeom", tecluster);
+    SetParmVal(wing_id, "InCluster", "XSec_1", rootcluster);
+    SetParmVal(wing_id, "OutCluster", "XSec_1", tipcluster);
+    SetParmVal(wing_id, "Tess_W", "Shape", chordtess);
+    SetParmVal(wing_id, "SectTess_U", "XSec_1", spantess);
+    Update();
+
+    WriteVSPFile(fname, SET_ALL);
+}
