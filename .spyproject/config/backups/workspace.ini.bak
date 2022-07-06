@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['validation_2\\output\\vspaero_api_test.py', 'validation_2\\test\\test.py', '..\\..\\..\\..\\..\\..\\My Drive\\Portable Software\\OpenVSP\\scripts\\TestAnalysisVSPAERO.vspscript']
+recent_files = ['validation_cs_9\\liftdist.py', 'validation_cs_9\\output\\validation_cs_9_DegenGeom.lod', 'validation_cs_9\\output\\validation_cs_9_DegenGeom.polar']
 
 [main]
 version = 0.2.0
