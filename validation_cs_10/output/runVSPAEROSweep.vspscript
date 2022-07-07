@@ -45,17 +45,17 @@ void main()
     SetStringAnalysisInput( analysis_name, "WingID", wid, 0 );
 
     // Freestream Parameters
-    double alpha_i = -3;
+    double alpha_i = 13.42;
     array< double > alpha_i_array;
     alpha_i_array.push_back( alpha_i );
     SetDoubleAnalysisInput( analysis_name, "AlphaStart", alpha_i_array, 0 );
 
-    double alpha_f = 13;
+    double alpha_f = 14.42;
     array< double > alpha_f_array;
     alpha_f_array.push_back( alpha_f );
     SetDoubleAnalysisInput( analysis_name, "AlphaEnd", alpha_f_array, 0 );
 
-    double alpha_npts = 17;
+    double alpha_npts = 1;
     array< int > alpha_npts_array;
     alpha_npts_array.push_back( alpha_npts );
     SetIntAnalysisInput( analysis_name, "AlphaNpts", alpha_npts_array, 0 );
@@ -66,20 +66,26 @@ void main()
     SetDoubleAnalysisInput( analysis_name, "MachStart", mach_i_array, 0 );
 
     // CG Reference Points
-    double x_cg = 0.44;
+    double x_cg = 0.595;
     array< double > x_cg_array;
     x_cg_array.push_back( x_cg );
     SetDoubleAnalysisInput( analysis_name, "Xcg", x_cg_array, 0 );
 
-    double y_cg = 0.00;
+    double y_cg = 0.000;
     array< double > y_cg_array;
     y_cg_array.push_back( y_cg );
     SetDoubleAnalysisInput( analysis_name, "Ycg", y_cg_array, 0 );
 
-    double z_cg = 0.00;
+    double z_cg = 0.025;
     array< double > z_cg_array;
     z_cg_array.push_back( z_cg );
     SetDoubleAnalysisInput( analysis_name, "Zcg", z_cg_array, 0 );
+
+    // Set MGC
+    double chord_mgc = 1.769;
+    array< double > chord_mgc_array;
+    chord_mgc_array.push_back( chord_mgc );
+    SetDoubleAnalysisInput( analysis_name, "cref", chord_mgc_array, 0 );
 
     Update();
 
