@@ -230,7 +230,7 @@ for i, twist in enumerate(twist_array):
              label="VSPAERO, " + r"$\mathdefault{\phi_{G}}=$" +
              "{0}°".format(int(twist)))
     ax1.plot(expCL_array_list[i][:, 0], expCL_array_list[i][:, 1],
-             linestyle="solid", color=PALETTE[i], marker=MARKERS[1],
+             linestyle="None", color=PALETTE[i], marker=MARKERS[1], alpha=0.5,
              label="Experimental, " +
              r"$\mathdefault{\phi_{G}}=$" + "{0}°".format(int(twist)))
     # ax1.fill_between(expCL_array_list[i][:, 0],
@@ -247,7 +247,7 @@ for i, twist in enumerate(twist_array):
     ax2.plot(CL_array, CM_array, label="VSPAERO, " + r"$\mathdefault{\phi_{G}}=$" +
              "{0}°".format(int(twist)))
     ax2.plot(expCM_array_list[i][:, 1], expCM_array_list[i][:, 0],
-             linestyle="solid", color=PALETTE[i], marker=MARKERS[1],
+             linestyle="None", color=PALETTE[i], marker=MARKERS[1], alpha=0.5,
              label="Experimental, " +
              r"$\mathdefault{\phi_{G}}=$" + "{0}°".format(int(twist)))
     # ax2.fill_between(expCM_array_list[i][:, 1],

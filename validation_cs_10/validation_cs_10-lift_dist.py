@@ -200,7 +200,7 @@ for i, twist in enumerate(twist_array):
     fig1, ax1 = plt.subplots(1, sharey=True, dpi=DPI)
     ax1.plot(yloc_array, cL_array, label="VSPAERO")
     ax1.plot(cLdist_array_list[i][:, 0], cLdist_array_list[i][:, 1], linestyle="None",
-             color=PALETTE[1], marker=MARKERS[1], label="Experimental")
+             color=PALETTE[1], marker=MARKERS[1], label="Experimental", alpha=0.5)
     # ax1.fill_between(cLdist_array_list[i][:, 0], cLdist_array_list[i][:, 1]*(1 + prcnt_error),
     #                   cLdist_array_list[i][:, 1]*(1 - prcnt_error), alpha=0.25,
     #                   color=PALETTE[1])

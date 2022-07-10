@@ -97,8 +97,8 @@ expCM_array = np.array([0.013559322033898306, 0.030508474576271188,
 expCMcomb_array = np.vstack((expCL4CM_array, expCM_array)).T
 expCMcomb_array = expCMcomb_array[expCMcomb_array[:, 0].argsort()]
 
-expCL4CM_array = expCMcomb_array[:, 0]
-expCM_array = expCMcomb_array[:, 1]
+expCL4CM_array = np.delete(expCMcomb_array[:, 0], [3, 4])
+expCM_array = np.delete(expCMcomb_array[:, 1], [3, 4])
 
 # %% Create OpenVSP file
 
@@ -180,7 +180,7 @@ fig, ax1 = plt.subplots(1, sharex=True, dpi=DPI)
 
 ax1.plot(alpha_array, CL_array, label="VSPAERO")
 ax1.plot(expalpha_array, expCL_array, linestyle="None",
-         label="Experimental", color=PALETTE[1], marker=MARKERS[1])
+         label="Experimental", color=PALETTE[1], marker=MARKERS[1], alpha=0.5)
 # ax1.fill_between(expalpha_array, expCL_array*(1 + prcnt_error),
 #                  expCL_array*(1 - prcnt_error), alpha=0.25,
 #                  color=PALETTE[1])
@@ -196,7 +196,7 @@ fig.savefig(os.path.join(GRAPHICS_DIR, "lift_curve.pdf"), format="pdf",
 fig, ax1 = plt.subplots(1, sharex=True, dpi=DPI)
 ax1.plot(CL_array, CM_array, label="VSPAERO")
 ax1.plot(expCL4CM_array, expCM_array, linestyle="None",
-         label="Experimental", color=PALETTE[1], marker=MARKERS[1])
+         label="Experimental", color=PALETTE[1], marker=MARKERS[1], alpha=0.5)
 # ax1.fill_between(expalpha_array, expCL_array*(1 + prcnt_error),
 #                  expCL_array*(1 - prcnt_error), alpha=0.25,
 #                  color=PALETTE[1])

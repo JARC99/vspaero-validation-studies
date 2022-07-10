@@ -157,7 +157,7 @@ newcldist = cldist_vsp*chord_array/(cref*CL)
 fig, ax1 = plt.subplots(1, sharex=True, dpi=DPI)
 ax1.plot(yloc_array, newcldist, label="VSPAERO")
 ax1.plot(expyloc_array, excldist_array, linestyle="None",
-         color=PALETTE[1], marker=MARKERS[1], label="Experimental")
+         color=PALETTE[1], marker=MARKERS[1], alpha=0.5, label="Experimental")
 # ax1.fill_between(expyloc_array, excldist_array*(1 + prcnt_error),
 #                  excldist_array*(1 - prcnt_error), alpha=0.25,
 #                  color=PALETTE[1])
