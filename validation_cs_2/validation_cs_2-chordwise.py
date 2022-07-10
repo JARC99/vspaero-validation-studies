@@ -30,7 +30,7 @@ VSPAERODIR = os.path.join(OUTPUTDIR, VSPSCRIPT)
 # Wing geometry
 span = 10
 chord = 1
-sweep = 0
+sweep = 35
 tcrat = 0.09
 
 # Mesh parameters
@@ -161,7 +161,9 @@ ax1.axhspan(DATCOM_dCLdalpha*(1-prcnt_error), DATCOM_dCLdalpha *
             (1+prcnt_error), color=PALETTE[1], alpha=0.25)
 ax1.axhline(SURFACES_dCLdalpha,
             color=PALETTE[2], linestyle="dashed", label="SURFACES")
-ax1.legend(loc="upper left", fontsize=LEGEND_FONTSIZE)
+
+
+#ax1.legend(loc="upper left")
 
 ax2.plot(chordwise_tess_array, CL_list, linestyle="None",
          marker=MARKERS[0], color=PALETTE[0], label="VSPAERO")

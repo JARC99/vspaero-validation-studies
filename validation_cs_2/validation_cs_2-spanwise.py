@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pylab as plt
 import seaborn as sns
 
+from tabulate import tabulate
+
 DPI = 300
 PALETTE = ["darkblue", "darkorange", "darkgreen", "firebrick",
            "purple", "mediumvioletred", "goldenrod", "darkcyan"]
@@ -161,7 +163,7 @@ ax1.axhspan(DATCOM_dCLdalpha*(1-prcnt_error), DATCOM_dCLdalpha *
             (1+prcnt_error), color=PALETTE[1], alpha=0.25)
 ax1.axhline(SURFACES_dCLdalpha,
             color=PALETTE[2], linestyle="dashed", label="SURFACES")
-ax1.legend(loc="upper left", fontsize=LEGEND_FONTSIZE)
+#ax1.legend(loc="upper left")
 
 ax2.plot(spanwise_tess_array, CL_list, linestyle="None",
          marker=MARKERS[0], color=PALETTE[0], label="VSPAERO")
@@ -186,3 +188,21 @@ ax1.set_xlim(left=0)
 
 fig.savefig(os.path.join(GRAPHICS_DIR, "spanwise_sweep-{0}deg.pdf".format(sweep)),
             format="pdf", bbox_inches="tight")
+
+# %% Table generator
+
+refpoint_ind = 0
+
+dCLdalpha_pcnterror = np.abs((dCLdalpha_list[refpoint_ind] - DATCOM_dCLdalpha)/DATCOM_dCLdalpha * 100)
+CL_pcnterror = np.abs((CL_list[refpoint_ind] - DATCOM_CL)/DATCOM_CL * 100)
+CDi_pcnterror = np.abs((CDi_list[refpoint_ind] - DATCOM_CDi)/DATCOM_CDi * 100)
+
+dCLdalpha_row = ["dCLdalpha", round(dCLdalpha_list[refpoint_ind], 4), round(DATCOM_dCLdalpha, 4), round(dCLdalpha_pcnterror, 2)]
+CL_row = ["CL", round(CL_list[refpoint_ind], 4), round(DATCOM_CL, 4), round(CL_pcnterror, 2)]
+CDi_row = ["CDi", round(CDi_list[refpoint_ind], 4), round(DATCOM_CDi, 4), round(CDi_pcnterror, 2)]
+
+row_list = [dCLdalpha_row, CL_row, CDi_row]
+table = tabulate(row_list,
+                 headers=["Coefficient", "VSPAERO", "DATCOM", "Error"],
+                 tablefmt="latex")
+print(table)

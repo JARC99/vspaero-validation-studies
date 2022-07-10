@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pylab as plt
 import seaborn as sns
 
+from scipy import interpolate
+
 DPI = 300
 PALETTE = ["darkblue", "darkorange", "darkgreen", "firebrick",
            "purple", "mediumvioletred", "goldenrod", "darkcyan"]
@@ -167,3 +169,12 @@ ax1.legend()
 
 fig.savefig(os.path.join(GRAPHICS_DIR, "lift_dist.pdf"), format="pdf",
             bbox_inches="tight")
+
+# %% Error calculation
+
+cLfromyloc = interpolate.interp1d(
+    expyloc_array, excldist_array, fill_value="extrapolate")
+expcL4error = cLfromyloc(yloc_array)
+
+cLdist_error = np.mean(np.abs((newcldist - expcL4error)/expcL4error) * 100)
+print(cLdist_error)

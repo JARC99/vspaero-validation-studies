@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pylab as plt
 import seaborn as sns
 
+from scipy import interpolate
+
 DPI = 300
 PALETTE = ["darkblue", "darkorange", "darkgreen", "firebrick",
            "purple", "mediumvioletred", "goldenrod", "darkcyan"]
@@ -206,7 +208,19 @@ for i, twist in enumerate(twist_array):
     ax1.set_ylim(bottom=0)
     ax1.set_xlabel(r"$\mathdefault{\dfrac{2y}{b}}$")
     ax1.set_ylabel(r"$\mathdefault{c_{L}}$")
-    ax1.legend()
+    if not i:
+        ax1.legend()
+    else:
+        pass
 
     fig1.savefig(os.path.join(GRAPHICS_DIR, "lift_dist-wsht{0}.pdf".format(twist)), format="pdf",
                  bbox_inches="tight")
+
+# %% Error calculation
+
+    cLfromyloc = interpolate.interp1d(
+        cLdist_array_list[i][:, 0], cLdist_array_list[i][:, 1], fill_value="extrapolate")
+    expcL4error = cLfromyloc(yloc_array)
+
+    cLdist_error = np.mean(np.abs((cL_array - expcL4error)/expcL4error) * 100)
+    print(cLdist_error)

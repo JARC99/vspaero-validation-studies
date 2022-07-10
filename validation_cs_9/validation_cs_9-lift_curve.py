@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pylab as plt
 import seaborn as sns
 
+from scipy import interpolate
+
 DPI = 300
 PALETTE = ["darkblue", "darkorange", "darkgreen", "firebrick",
            "purple", "mediumvioletred", "goldenrod", "darkcyan"]
@@ -32,11 +34,12 @@ root_chord = 21.941/12
 tip_chord = 9.873/12
 sweep_loc = 0.25
 sweep = 45
+sweep_le = 46.33
 
 tap_rat = tip_chord/root_chord
 chord_mgc = 2/3 * root_chord * (1 + tap_rat + tap_rat**2)/(1 + tap_rat)
 yloc_mgc = midspan/3 * (1 + 2*tap_rat)/(1 + tap_rat)
-xloc_mgc = yloc_mgc*np.tan(sweep*np.pi/180) + chord_mgc/4
+xloc_mgc = yloc_mgc*np.tan(sweep_le*np.pi/180) + chord_mgc/4
 
 xseccurve_type = 8
 tc_rat = 0.12
@@ -68,11 +71,35 @@ expCL_array = np.array([-0.235, -0.177, -0.087, -0.012, 0.027, 0.069, 0.15,
                         0.711, 0.767, 0.809, 0.857, 0.901, 0.951, 1.01, 1.041,
                         1.074, 1.091, 1.099, 1.08])
 
-expCL4CM_array = np.array([-0.24055562337239586, 0.6894443766276042, -0.17388895670572918, -0.09388895670572918, -0.09388895670572918, 0.9138333129882813, 0.8671666463216147, 0.8138333129882813, 0.7738333129882813, 0.7271666463216147, 0.6338333129882813, 0.5904999796549479, 0.5338333129882813, 0.49049997965494796, -0.09433334350585938, 0.1171666463216146, 0.1671666463216146, 0.24049997965494793, 0.3171666463216146, 0.42049997965494795, 0.25383331298828127])
-expCM_array = np.array([0.013559322033898306, 0.030508474576271188, 0.01016949152542373, 0.010847457627118645, 0.010847457627118645, 0.09966101694915255, 0.08542372881355932, 0.07932203389830508, 0.058983050847457634, 0.04949152542372882, 0.015593220338983051, 0.0033898305084745766, -0.002711864406779661, -0.007457627118644068, 0.010847457627118645, -0.008813559322033898, -0.014237288135593221, -0.02169491525423729, -0.018305084745762715, -0.012881355932203391, -0.016271186440677966])
+expCL4CM_array = np.array([-0.24055562337239586, 0.6894443766276042,
+                           -0.17388895670572918, -0.09388895670572918,
+                           -0.09388895670572918, 0.9138333129882813,
+                           0.8671666463216147, 0.8138333129882813,
+                           0.7738333129882813, 0.7271666463216147,
+                           0.6338333129882813, 0.5904999796549479,
+                           0.5338333129882813, 0.49049997965494796,
+                           -0.09433334350585938, 0.1171666463216146,
+                           0.1671666463216146, 0.24049997965494793,
+                           0.3171666463216146, 0.42049997965494795,
+                           0.25383331298828127])
+expCM_array = np.array([0.013559322033898306, 0.030508474576271188,
+                        0.01016949152542373, 0.010847457627118645,
+                        0.010847457627118645, 0.09966101694915255,
+                        0.08542372881355932, 0.07932203389830508,
+                        0.058983050847457634, 0.04949152542372882,
+                        0.015593220338983051, 0.0033898305084745766,
+                        -0.002711864406779661, -0.007457627118644068,
+                        0.010847457627118645, -0.008813559322033898,
+                        -0.014237288135593221, -0.02169491525423729,
+                        -0.018305084745762715, -0.012881355932203391,
+                        -0.016271186440677966])
 
+expCMcomb_array = np.vstack((expCL4CM_array, expCM_array)).T
+expCMcomb_array = expCMcomb_array[expCMcomb_array[:, 0].argsort()]
 
-y = [-0.24055562337239586, 0.6894443766276042, -0.17388895670572918, -0.09388895670572918, -0.09388895670572918, 0.9138333129882813, 0.8671666463216147, 0.8138333129882813, 0.7738333129882813, 0.7271666463216147, 0.6338333129882813, 0.5904999796549479, 0.5338333129882813, 0.49049997965494796, -0.09433334350585938, 0.1171666463216146, 0.1671666463216146, 0.24049997965494793, 0.3171666463216146, 0.42049997965494795, 0.25383331298828127]
+expCL4CM_array = expCMcomb_array[:, 0]
+expCM_array = expCMcomb_array[:, 1]
+
 # %% Create OpenVSP file
 
 vsp.ClearVSPModel()
@@ -148,7 +175,9 @@ CM_array = polar_array[:, 18]
 
 # %% Plot results
 
-fig, ax1 = plt.subplots(1, sharey=True, dpi=DPI)
+
+fig, ax1 = plt.subplots(1, sharex=True, dpi=DPI)
+
 ax1.plot(alpha_array, CL_array, label="VSPAERO")
 ax1.plot(expalpha_array, expCL_array, linestyle="None",
          label="Experimental", color=PALETTE[1], marker=MARKERS[1])
@@ -156,14 +185,13 @@ ax1.plot(expalpha_array, expCL_array, linestyle="None",
 #                  expCL_array*(1 - prcnt_error), alpha=0.25,
 #                  color=PALETTE[1])
 ax1.set_ylim(bottom=-0.4)
-ax1.set_xlabel(r"$\mathdefault{\alpha}$, °")
 ax1.set_ylabel(r"$\mathdefault{C_{L}}$")
 ax1.legend()
 
 fig.savefig(os.path.join(GRAPHICS_DIR, "lift_curve.pdf"), format="pdf",
             bbox_inches="tight")
 
-# %%
+
 
 fig, ax1 = plt.subplots(1, sharex=True, dpi=DPI)
 ax1.plot(CL_array, CM_array, label="VSPAERO")
@@ -172,11 +200,35 @@ ax1.plot(expCL4CM_array, expCM_array, linestyle="None",
 # ax1.fill_between(expalpha_array, expCL_array*(1 + prcnt_error),
 #                  expCL_array*(1 - prcnt_error), alpha=0.25,
 #                  color=PALETTE[1])
-ax1.set_xlim(left=-0.4, right=1.0)
+ax1.set_xlim(left=-0.4, right=1)
 ax1.set_ylim(bottom=-0.15)
 
 ax1.set_xlabel(r"$\mathdefault{C_{L}}$")
 ax1.set_ylabel(r"$\mathdefault{C_{M}}$")
-ax1.legend()
+#ax1.legend()
 fig.savefig(os.path.join(GRAPHICS_DIR, "moment_curve.pdf"), format="pdf",
             bbox_inches="tight")
+
+# %% Error calculation
+
+expCLfromalpha = interpolate.interp1d(expalpha_array, expCL_array, fill_value="extrapolate")
+expCL4error = expCLfromalpha(alpha_array)
+
+expdCLdalpha = np.mean(expCL4error[1:] - expCL4error[:-1]) * 180/np.pi
+dCLdalpha = np.mean(CL_array[1:] - CL_array[:-1]) * 180/np.pi
+dCLdalpha_error = np.abs((dCLdalpha - expdCLdalpha)/expdCLdalpha) * 100
+print(dCLdalpha_error)
+
+CL4error_array = np.linspace(-0.25, 0.25, 10)
+
+expCMfromCL = interpolate.interp1d(expCL4CM_array, expCM_array, fill_value="extrapolate")
+expCM4error = expCMfromCL(CL4error_array)
+expdCMdCL = np.mean((expCM4error[1:] - expCM4error[:-1])/(CL4error_array[1:] - CL4error_array[:-1]))
+
+
+CMfromCL = interpolate.interp1d(CL_array, CM_array, fill_value="extrapolate")
+CM4error = CMfromCL(CL4error_array)
+dCMdCL = np.mean((CM4error[1:] - CM4error[:-1])/(CL4error_array[1:] - CL4error_array[:-1]))
+
+dCMdCL_error = np.abs((dCMdCL - expdCMdCL)/expdCMdCL) * 100
+print(dCMdCL_error)

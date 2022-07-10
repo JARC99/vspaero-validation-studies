@@ -7,6 +7,8 @@ import numpy as np
 import matplotlib.pylab as plt
 import seaborn as sns
 
+from scipy import interpolate
+
 DPI = 300
 PALETTE = ["darkblue", "darkorange", "darkgreen", "firebrick",
            "purple", "mediumvioletred", "goldenrod", "darkcyan"]
@@ -228,7 +230,7 @@ for i, twist in enumerate(twist_array):
              label="VSPAERO, " + r"$\mathdefault{\phi_{G}}=$" +
              "{0}°".format(int(twist)))
     ax1.plot(expCL_array_list[i][:, 0], expCL_array_list[i][:, 1],
-             linestyle="None", color=PALETTE[i], marker=MARKERS[1],
+             linestyle="solid", color=PALETTE[i], marker=MARKERS[1],
              label="Experimental, " +
              r"$\mathdefault{\phi_{G}}=$" + "{0}°".format(int(twist)))
     # ax1.fill_between(expCL_array_list[i][:, 0],
@@ -245,7 +247,7 @@ for i, twist in enumerate(twist_array):
     ax2.plot(CL_array, CM_array, label="VSPAERO, " + r"$\mathdefault{\phi_{G}}=$" +
              "{0}°".format(int(twist)))
     ax2.plot(expCM_array_list[i][:, 1], expCM_array_list[i][:, 0],
-             linestyle="None", color=PALETTE[i], marker=MARKERS[1],
+             linestyle="solid", color=PALETTE[i], marker=MARKERS[1],
              label="Experimental, " +
              r"$\mathdefault{\phi_{G}}=$" + "{0}°".format(int(twist)))
     # ax2.fill_between(expCM_array_list[i][:, 1],
@@ -256,6 +258,35 @@ for i, twist in enumerate(twist_array):
 
     ax2.set_xlabel(r"$\mathdefault{C_{L}}$")
     ax2.set_ylabel(r"$\mathdefault{C_{M}}$")
-    ax2.legend()
+    #ax2.legend()
     fig2.savefig(os.path.join(GRAPHICS_DIR, "moment_curves.pdf"), format="pdf",
                  bbox_inches="tight")
+
+# %%
+
+    expCLfromalpha = interpolate.interp1d(expCL_array_list[i][:, 0], expCL_array_list[i][:, 1], fill_value="extrapolate")
+    expCL4error = expCLfromalpha(alpha_array)
+
+    expdCLdalpha = np.mean(expCL4error[1:] - expCL4error[:-1]) * 180/np.pi
+    dCLdalpha = np.mean(CL_array[1:] - CL_array[:-1]) * 180/np.pi
+    dCLdalpha_error = np.abs((dCLdalpha - expdCLdalpha)/expdCLdalpha) * 100
+    # print(round(expdCLdalpha, 4))
+    # print(round(dCLdalpha, 4))
+    # print(round(dCLdalpha_error, 2))
+    # print("------------------------------------")
+
+    CL4error_array = np.linspace(-0.125, 1.2, 10)
+    expCMfromCL = interpolate.interp1d(expCM_array_list[i][:, 1], expCM_array_list[i][:, 0], fill_value="extrapolate")
+    expCM4error = expCMfromCL(CL4error_array)
+    expdCMdCL = np.mean((expCM4error[1:] - expCM4error[:-1])/(CL4error_array[1:] - CL4error_array[:-1]))
+
+
+    CMfromCL = interpolate.interp1d(CL_array, CM_array, fill_value="extrapolate")
+    CM4error = CMfromCL(CL4error_array)
+    dCMdCL = np.mean((CM4error[1:] - CM4error[:-1])/(CL4error_array[1:] - CL4error_array[:-1]))
+
+    dCMdCL_error = np.abs((dCMdCL - expdCMdCL)/expdCMdCL) * 100
+    print(round(expdCMdCL, 4))
+    print(round(dCMdCL, 4))
+    print(round(dCMdCL_error, 2))
+    print("__________________________")

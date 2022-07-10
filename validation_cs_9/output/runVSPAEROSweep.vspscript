@@ -45,17 +45,17 @@ void main()
     SetStringAnalysisInput( analysis_name, "WingID", wid, 0 );
 
     // Freestream Parameters
-    double alpha_i = 4.7;
+    double alpha_i = -5;
     array< double > alpha_i_array;
     alpha_i_array.push_back( alpha_i );
     SetDoubleAnalysisInput( analysis_name, "AlphaStart", alpha_i_array, 0 );
 
-    double alpha_f = 5;
+    double alpha_f = 15;
     array< double > alpha_f_array;
     alpha_f_array.push_back( alpha_f );
     SetDoubleAnalysisInput( analysis_name, "AlphaEnd", alpha_f_array, 0 );
 
-    double alpha_npts = 1;
+    double alpha_npts = 21;
     array< int > alpha_npts_array;
     alpha_npts_array.push_back( alpha_npts );
     SetIntAnalysisInput( analysis_name, "AlphaNpts", alpha_npts_array, 0 );
@@ -66,7 +66,7 @@ void main()
     SetDoubleAnalysisInput( analysis_name, "MachStart", mach_i_array, 0 );
 
     // CG Reference Points
-    double x_cg = 0.00;
+    double x_cg = 2.77;
     array< double > x_cg_array;
     x_cg_array.push_back( x_cg );
     SetDoubleAnalysisInput( analysis_name, "Xcg", x_cg_array, 0 );

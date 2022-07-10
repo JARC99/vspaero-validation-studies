@@ -57,7 +57,7 @@ prcnt_error = 0.05
 knowndCLdalpha_list = [2.743, 2.767]  # , 2.790, 2.776, 2.767]
 knowndCMdalpha_list = [-3.10, -3.139]  # , -3.174, -3.152, -3.139]
 # , "SURFACES 6x16", "SURFACES 8x24", "SURFACES 16x36"]
-knownlabel_list = [r"$\mathdefault{Expected~\pm 5\%}$", "SURFACES"]
+knownlabel_list = [r"$\mathdefault{Published~Data~\pm 5\%}$", "SURFACES"]
 
 # %% Create OpenVSP file
 
@@ -152,9 +152,23 @@ for i, knownlabel in enumerate(knownlabel_list):
 
 ax1.set_xlim(left=0)
 ax1.set_ylim(bottom=0)
-ax2.set_ylim(top=0)
+ax2.set_ylim(top=0, bottom=-0.6)
 
 ax1.legend(fontsize=LEGEND_FONTSIZE)
 
 fig.savefig(os.path.join(GRAPHICS_DIR, "lift_and_moment_curve.pdf".format(sweep)),
             format="pdf", bbox_inches="tight")
+
+# %% Error calculation
+
+dCLdalpha_array = (CL_array[1:] - CL_array[:-1])*180/np.pi
+dCLdalpha_ave = np.mean(dCLdalpha_array)
+dCLdalpha_error = np.abs((dCLdalpha_ave - knowndCLdalpha_list[0])/knowndCLdalpha_list[0] * 100)
+print(round(dCLdalpha_error, 2))
+
+print("")
+
+dCMdalpha_array = (CM_array[1:] - CM_array[:-1])*180/np.pi
+dCMdalpha_ave = np.mean(dCMdalpha_array)
+dCMdalpha_error = np.abs((dCMdalpha_ave - knowndCMdalpha_list[0])/knowndCMdalpha_list[0] * 100)
+print(round(dCMdalpha_error, 2))

@@ -56,7 +56,8 @@ prcnt_error = 0.05
 
 knowndCLdalpha_list = [3.433, 3.442, 3.450]  # , 2.790, 2.776, 2.767]
 # , "SURFACES 6x16", "SURFACES 8x24", "SURFACES 16x36"]
-knownlabel_list = [r"$\mathdefault{Bertin-Smith~\pm 5\%}$", "SURFACES", "Tornado"]
+knownlabel_list = [
+    r"$\mathdefault{Bertin-Smith~\pm 5\%}$", "SURFACES", "Tornado"]
 
 # %% Create OpenVSP file
 
@@ -131,13 +132,11 @@ for i, knownlabel in enumerate(knownlabel_list):
     ax1.plot(alpha_array, knownCL_array, linestyle="dashed",
              label=knownlabel, color=PALETTE[i+1])
 
-
     if not i:
         ax1.fill_between(alpha_array, knownCL_array*(1 + prcnt_error),
-                     knownCL_array*(1 - prcnt_error), alpha=0.25, color=PALETTE[i+1])
+                         knownCL_array*(1 - prcnt_error), alpha=0.25, color=PALETTE[i+1])
     else:
         pass
-
 
 
 ax1.set_xlim(left=0)
@@ -147,3 +146,13 @@ ax1.legend(fontsize=LEGEND_FONTSIZE)
 
 fig.savefig(os.path.join(GRAPHICS_DIR, "lift_curve.pdf".format(sweep)),
             format="pdf", bbox_inches="tight")
+
+# %% Error calculation
+
+dCLdalpha_array = (CL_array[1:] - CL_array[:-1])*180/np.pi
+dCLdalpha_ave = np.mean(dCLdalpha_array)
+dCLdalpha_error = np.abs(
+    (dCLdalpha_ave - knowndCLdalpha_list[0])/knowndCLdalpha_list[0] * 100)
+print(round(dCLdalpha_error, 2))
+
+print("")
