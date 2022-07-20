@@ -1,0 +1,78 @@
+void main()
+{
+    Print( string( "-> Begin TestVSPAeroSharpTrailingEdge" ) );
+    Print( string( "" ) );
+
+    //==== Analysis: VSPAero Single Point ====//
+    string analysis_name = "VSPAEROSweep";
+    Print( analysis_name );
+
+    // Open the file
+	  string fname = "valcs_2.vsp3";
+    ReadVSPFile( fname ); // Sets VSP3 file name
+    Update();
+
+    //==== Analysis: VSPAero Compute Geometry to Create Vortex Lattice DegenGeom File ====//
+    string compgeom_name = "VSPAEROComputeGeometry";
+    Print( compgeom_name );
+
+    // Set defaults
+    SetAnalysisInputDefaults( compgeom_name );
+
+    // list inputs, type, and current values
+    PrintAnalysisInputs( compgeom_name );
+
+    // Execute
+    Print( "\tExecuting..." );
+    string compgeom_resid = ExecAnalysis( compgeom_name );
+    Print( "COMPLETE" );
+
+    // Get & Display Results
+    PrintResults( compgeom_resid );
+
+    //==== Analysis: VSPAero Sweep ====//
+    // Set defaults
+    SetAnalysisInputDefaults( analysis_name );
+
+    // Reference geometry set
+    array< int > geom_set;
+    geom_set.push_back( 0 );
+    SetIntAnalysisInput( analysis_name, "GeomSet", geom_set, 0 );
+    array< int > ref_flag;
+    ref_flag.push_back( 1 );
+    SetIntAnalysisInput( analysis_name, "RefFlag", ref_flag, 0 );
+    array< string > wid = FindGeomsWithName( "WingGeom" );
+    SetStringAnalysisInput( analysis_name, "WingID", wid, 0 );
+
+    // Freestream Parameters
+    double alpha_i = -10;
+    array< double > alpha_i_array;
+    alpha_i_array.push_back( alpha_i );
+    SetDoubleAnalysisInput( analysis_name, "AlphaStart", alpha_i_array, 0 );
+
+    double alpha_f = 10;
+    array< double > alpha_f_array;
+    alpha_f_array.push_back( alpha_f );
+    SetDoubleAnalysisInput( analysis_name, "AlphaEnd", alpha_f_array, 0 );
+
+    double alpha_npts = 21;
+    array< int > alpha_npts_array;
+    alpha_npts_array.push_back( alpha_npts );
+    SetIntAnalysisInput( analysis_name, "AlphaNpts", alpha_npts_array, 0 );
+
+    double mach_i = 0.00;
+    array< double > mach_i_array;
+    mach_i_array.push_back( mach_i );
+    SetDoubleAnalysisInput( analysis_name, "MachStart", mach_i_array, 0 );
+
+    Update();
+
+    // list inputs, type, and current values
+    PrintAnalysisInputs( analysis_name );
+    Print( "" );
+
+    // Execute
+    Print( "\tExecuting..." );
+    string rid = ExecAnalysis( analysis_name );
+    Print( "COMPLETE" );
+}
