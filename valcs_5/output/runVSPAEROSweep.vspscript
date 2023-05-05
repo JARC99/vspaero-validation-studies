@@ -45,12 +45,12 @@ void main()
     SetStringAnalysisInput( analysis_name, "WingID", wid, 0 );
 
     // Freestream Parameters
-    double alpha_i = 13.42;
+    double alpha_i = 13.42292490118577;
     array< double > alpha_i_array;
     alpha_i_array.push_back( alpha_i );
     SetDoubleAnalysisInput( analysis_name, "AlphaStart", alpha_i_array, 0 );
 
-    double alpha_f = 14.42;
+    double alpha_f = 14.42292490118577;
     array< double > alpha_f_array;
     alpha_f_array.push_back( alpha_f );
     SetDoubleAnalysisInput( analysis_name, "AlphaEnd", alpha_f_array, 0 );

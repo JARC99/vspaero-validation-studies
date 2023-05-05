@@ -20,3 +20,5 @@ NumberOfControlGroups = 0
 Preconditioner = Matrix 
 Karman-Tsien Correction = N 
 Stability Type = 0 
+NumberOfQuadTrees = 1 
+1 2 0.000000 

@@ -31,7 +31,7 @@ VSPAERODIR = os.path.join(OUTPUTDIR, VSPSCRIPT)
 # Wing geometry
 span = 10
 chord = 1
-sweep = 0
+sweep = 35
 tcrat = 0.09
 
 # Mesh parameters
@@ -171,7 +171,8 @@ ax1.axhline(SURFACES_dCLdalpha,
             color=PALETTE[2], linestyle="dashed", label="SURFACES")
 
 
-ax1.legend(loc="upper left")
+
+#ax1.legend(loc="upper left", ncol=3)
 
 ax2.plot(chordwise_tess_array, CL_list, linestyle="None",
          marker=MARKERS[0], color=PALETTE[0], label="VSPAERO")
@@ -181,6 +182,7 @@ ax2.axhline(DATCOM_CL, color=PALETTE[1], linestyle="dashed")
 ax2.axhspan(DATCOM_CL*(1-prcnt_error), DATCOM_CL *
             (1+prcnt_error), color=PALETTE[1], alpha=0.25)
 ax2.axhline(SURFACES_CL, color=PALETTE[2], linestyle="dashed")
+
 
 ax3.plot(chordwise_tess_array, CDi_list, linestyle="None",
          marker=MARKERS[0], color=PALETTE[0], label="VSPAERO")
@@ -192,12 +194,20 @@ ax3.axhspan(DATCOM_CDi*(1-prcnt_error), DATCOM_CDi *
 ax3.axhline(SURFACES_CDi, color=PALETTE[2],
             linestyle="dashed", label="SURFACES")
 
+
 ax4.plot(chordwise_tess_array, time_exec_list, color=PALETTE[0], label="VSPAERO")
 # ax3.errorbar(chordwise_tess_array, CDi_list, yerr=np.array(
 #     CDi_list)*prcnt_error, label="VSPAERO", linestyle="None", marker=MARKERS[0], ecolor="black", capsize=3)
 
 ax1.set_xlim(left=0)
-ax4.set_ylim(bottom=0, top=5)
+
+ax1.set_ylim(3.75, 4.75)
+ax2.set_ylim(0.65, 0.85)
+ax3.set_ylim(0.015, 0.02)
+ax4.set_ylim(bottom=0, top=9)
+
+
+
 fig.align_ylabels()
 fig.savefig(os.path.join(GRAPHICS_DIR, "chordwise_sweep-{0}deg.pdf".format(sweep)),
             format="pdf", bbox_inches="tight")

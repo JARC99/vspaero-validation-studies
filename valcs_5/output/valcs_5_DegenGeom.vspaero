@@ -5,7 +5,7 @@ X_cg = 0.595000
 Y_cg = 0.000000 
 Z_cg = 0.025000 
 Mach = 0.170000 
-AoA = 13.420000 
+AoA = 13.422925 
 Beta = 0.000000 
 Vinf = 100.000000 
 Rho = 0.002377 
@@ -20,3 +20,5 @@ NumberOfControlGroups = 0
 Preconditioner = Matrix 
 Karman-Tsien Correction = N 
 Stability Type = 0 
+NumberOfQuadTrees = 1 
+1 2 0.000000 

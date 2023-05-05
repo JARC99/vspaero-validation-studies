@@ -83,9 +83,6 @@ def setVSPAEROsweepinput(alpha_i, alpha_f, alpha_npts, mach=0.0, x_cg=0.0,
 
 # %% Create OpenVSP file
 
-fig1, ax1 = plt.subplots(1, sharex=True, dpi=DPI)
-ax1 = ax1
-
 #fig2, ax2 = plt.subplots(1, sharex=True, dpi=DPI)
 for i, wing in enumerate(wing_list):
     vsp.ClearVSPModel()
@@ -141,12 +138,14 @@ for i, wing in enumerate(wing_list):
 
 
 # %% Plot results
-
-    ax1.plot(alpha_array, CL_array, label="VSPAERO, " +
-             r"$\mathdefault{\lambda = }$" + str(wing[1]))
-    ax1.plot(expalpha_array, expCL_array, linestyle="None", label="Experimental, " +
-             r"$\mathdefault{\lambda = }$" + str(wing[1]), color=PALETTE[i], marker=MARKERS[1], alpha=0.5)
-
+    fig1, ax1 = plt.subplots(1, sharex=True, dpi=DPI)
+    ax1.plot(alpha_array, CL_array, label="VSPAERO", color=PALETTE[i])
+    ax1.plot(expalpha_array, expCL_array, linestyle="None", label="Experimental", color=PALETTE[i], marker=MARKERS[1], alpha=0.5)
+    ax1.set_xlabel("Angle of Attack, °")
+    ax1.set_ylabel("Lift Coefficient")
+    ax1.legend(title="TR = {0}".format(wing[1]))
+    fig1.savefig(os.path.join(GRAPHICS_DIR, "lift_curves_TR{0}.pdf".format(int(wing[1]*100))), format="pdf",
+                  bbox_inches="tight")
 #%% Calculate the percent error
 
     expCLfromalpha = interpolate.interp1d(
@@ -160,10 +159,3 @@ for i, wing in enumerate(wing_list):
     print("VSPAERO dCL/dalpha = {0}".format(round(dCLdalpha, 4)))
     print("% Error = {0}".format(round(dCLdalpha_error, 2)))
     print("-----------------------------------------\n")
-
-
-ax1.set_xlabel("Angle of Attack, °")
-ax1.set_ylabel("Lift Coefficient")
-ax1.legend()
-fig1.savefig(os.path.join(GRAPHICS_DIR, "lift_curves.pdf"), format="pdf",
-              bbox_inches="tight")

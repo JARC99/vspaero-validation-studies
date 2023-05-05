@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['validation_cs_a\\validation_cs_a-lift_curve.py', 'validation_cs_b\\validation_cs_b-lift_curve.py', 'validation_cs_b\\output\\runVSPAEROSweep.vspscript']
+recent_files = ['..\\..\\..\\..\\Portable Software\\OpenVSP\\OpenVSP_XSecExtractor\\xsec_extractor.py']
 
 [main]
 version = 0.2.0

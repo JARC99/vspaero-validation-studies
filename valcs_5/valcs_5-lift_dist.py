@@ -59,7 +59,7 @@ te_clstr = 0.25
 
 # Flow conditions
 
-alpha_max_list = [13.44, 13.42]
+alpha_max_list = [13.599999999999977, 13.42292490118577]
 
 
 mach = 0.17
@@ -130,7 +130,7 @@ def setVSPAEROsweepinput(alpha_i, alpha_f, alpha_npts, mach=0.0, x_cg=0.0,
 
 
 # %% Create OpenVSP file
-
+fig1, ax1 = plt.subplots(1, sharey=True, dpi=DPI)
 for i, twist in enumerate(twist_array):
     alpha_i = alpha_max_list[i]
     alpha_f = alpha_i + 1
@@ -197,10 +197,14 @@ for i, twist in enumerate(twist_array):
     cL_array = loaddist_array[:, 7]
     yloc_array = loaddist_array[:, 1]
 
-    fig1, ax1 = plt.subplots(1, sharey=True, dpi=DPI)
-    ax1.plot(yloc_array, cL_array, label="VSPAERO")
-    ax1.plot(cLdist_array_list[i][:, 0], cLdist_array_list[i][:, 1], linestyle="None",
-             color=PALETTE[1], marker=MARKERS[1], label="Experimental", alpha=0.5)
+
+    ax1.plot(yloc_array, cL_array,
+             label="VSPAERO, " + r"$\mathdefault{\phi_{G}}=$" +
+             "{0}°".format(int(twist)))
+    ax1.plot(cLdist_array_list[i][:, 0], cLdist_array_list[i][:, 1],
+             linestyle="None", color=PALETTE[i], marker=MARKERS[1], alpha=0.5,
+             label="Experimental, " +
+             r"$\mathdefault{\phi_{G}}=$" + "{0}°".format(int(twist)))
     # ax1.fill_between(cLdist_array_list[i][:, 0], cLdist_array_list[i][:, 1]*(1 + prcnt_error),
     #                   cLdist_array_list[i][:, 1]*(1 - prcnt_error), alpha=0.25,
     #                   color=PALETTE[1])
@@ -208,12 +212,11 @@ for i, twist in enumerate(twist_array):
     ax1.set_ylim(bottom=0)
     ax1.set_xlabel("Normalized Span")
     ax1.set_ylabel("Lift Coefficient")
-    if not i:
-        ax1.legend()
-    else:
-        pass
 
-    fig1.savefig(os.path.join(GRAPHICS_DIR, "lift_dist-wsht{0}.pdf".format(twist)), format="pdf",
+    ax1.legend()
+
+
+    fig1.savefig(os.path.join(GRAPHICS_DIR, "lift_dist-wsht.pdf".format(twist)), format="pdf",
                  bbox_inches="tight")
 
 # %% Error calculation

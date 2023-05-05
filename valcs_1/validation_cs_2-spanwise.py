@@ -171,7 +171,7 @@ ax1.axhspan(DATCOM_dCLdalpha*(1-prcnt_error), DATCOM_dCLdalpha *
             (1+prcnt_error), color=PALETTE[1], alpha=0.25)
 ax1.axhline(SURFACES_dCLdalpha,
             color=PALETTE[2], linestyle="dashed", label="SURFACES")
-#ax1.legend(loc="upper left")
+#ax1.legend(loc="upper left", ncol=3)
 
 ax2.plot(spanwise_tess_array, CL_list, linestyle="None",
          marker=MARKERS[0], color=PALETTE[0], label="VSPAERO")
@@ -196,7 +196,12 @@ ax4.plot(spanwise_tess_array, time_exec_list, color=PALETTE[0], label="VSPAERO")
 
 
 ax1.set_xlim(left=0)
+
+ax1.set_ylim(3.75, 5)
+ax2.set_ylim(0.65, 0.9)
+ax3.set_ylim(0.005, 0.0225)
 ax4.set_ylim(bottom=0, top=15)
+
 fig.align_ylabels()
 fig.savefig(os.path.join(GRAPHICS_DIR, "spanwise_sweep-{0}deg.pdf".format(sweep)),
             format="pdf", bbox_inches="tight")
